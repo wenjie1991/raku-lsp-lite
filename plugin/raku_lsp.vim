@@ -1,18 +1,18 @@
+let g:my_script_path = expand('<sfile>:p:h')
+
 if has('nvim-0.5') 
 lua <<EOF
 local server_config = require('lspconfig.configs')
 local root_pattern = require('lspconfig.util').root_pattern
 
-local api = vim.api -- Get Neovim's Lua API
--- Get current working directory
-local cwd = api.nvim_eval('getcwd()')
+-- Access the Vim variable
+local script_path = vim.g.my_script_path
 
 -- Create absolute path to the lsp.raku file
-local cmd_path = cwd .. '/lsp/lsp.raku'
+local cmd_path = script_path .. '/../lsp/lsp.raku'
 
 server_config.raku = {
     default_config = {
-    -- cmd = {'/Users/wsun/projects/raku_nvim/old_fold/lsp/t/lsp.raku', '--vim'},
     cmd = {cmd_path, '--vim'},
         name = 'raku',
         filetypes = {
@@ -24,6 +24,9 @@ server_config.raku = {
         root_dir = root_pattern('', 'package.json', 'META6.json')
     }
 }
+
+-- debug print out the cmd_path
+-- print(cmd_path)
 
 require('lspconfig').raku.setup({})
 EOF
